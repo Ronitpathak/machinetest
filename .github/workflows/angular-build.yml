@@ -1,0 +1,43 @@
+name: Build Angular App
+
+on:
+  push:
+    branches:
+      - angular-app
+
+env:
+  NODE_VERSION: 16
+  BUILD_OUTPUT_DIR: dist/angular-app # Define the build output directory
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout code from the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Setup Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # Step 3: Install project dependencies
+      - name: Install Dependencies
+        run: |
+          echo "Installing dependencies..."
+          npm  ${{ env.NODE_VERSION }}
+
+      # Step 4: Build the Angular application
+      - name: Build Angular App
+        run: |
+          echo "Building the Angular app..."
+          npm run build -- --output-path=${{ env.BUILD_OUTPUT_DIR }}
+
+      # Step 5: List the output directory for verification
+      - name: Verify Build Output
+        run: |
+          echo "Build completed successfully. Verifying output directory:"
+          ls -ltr ${{ env.BUILD_OUTPUT_DIR }}
